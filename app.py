@@ -13,9 +13,6 @@ app = Flask(__name__)
 
 init_db()
 
-def generate_short_code():
-    
-
 @app.route("/")
 def hello_world():
     return 'Hello this is Sarang from Flask'
