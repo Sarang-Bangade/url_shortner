@@ -1,71 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Url Shortner</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Python URL Shortener</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-300 text-gray-800 font-sans p-6">
-    <div class = "max-w-2xl mx-auto">
-        <h1 class="text-3xl font-bold mb-6 text-center text-blue-600">
-            Python URL shortner
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+
+    <div class="w-full max-w-3xl bg-white shadow-lg rounded-xl p-8">
+
+        <!-- Header -->
+        <h1 class="text-4xl font-bold text-center text-blue-600 mb-2">
+            Python URL Shortener
         </h1>
-        <form method="POST" class="'bg-white shadow-md rounded p-6 mb-6 space-y-4">
+        <p class="text-center text-gray-500 mb-8">
+            Shorten long URLs and track visits easily
+        </p>
+
+        <!-- Form -->
+        <form method="POST" class="bg-gray-50 border rounded-lg p-6 mb-8 space-y-4">
             <label class="block">
-                <span class="text-gray-700">Enter a long URL</span>
-                <input type="text"
-                       name="url"
-                       placeholder="https://example.com/veryLongURL"
-                       required
-                       class="mt-1 block w-full border border-gray-300 rounded p-2"
-                       >
+                <span class="text-gray-700 font-medium">Enter a long URL</span>
+                <input
+                    type="url"
+                    name="url"
+                    placeholder="https://example.com/very-long-url"
+                    required
+                    class="mt-2 block w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
             </label>
-            <button class="bg-blue-600 text-whit px-4 py-2 rounded hover:bg-blue-700" type="submit">Shorten</button>
+
+            <button
+                type="submit"
+                class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"
+            >
+                Shorten URL
+            </button>
         </form>
-        <h2 class="text-xl font-semibold mb-2">All shorten URLs</h2>
+
+        <!-- URLs Table -->
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">
+            Shortened URLs
+        </h2>
+
         {% if all_urls %}
         <div class="overflow-x-auto">
-            <table class="w-full border border-collaspe border-gray-500 text-sm">
-               <thead class="bg-gray-200">
-                <tr>
-                    <th class="border px-4 py-2 text-left">Short URL</th>
-                    <th class="border px-4 py-2 text-left">Original URL</th>
-                    <th class="border px-4 py-2 text-left">Visits</th>
-                    <th class="border px-4 py-2 text-left">Action</th>
-                </tr>
-               </thead> 
-               <tbody>
+            <table class="w-full border border-gray-200 rounded-lg overflow-hidden text-sm">
+                <thead class="bg-gray-100 text-gray-700">
+                    <tr>
+                        <th class="px-4 py-3 text-left">Short URL</th>
+                        <th class="px-4 py-3 text-left">Original URL</th>
+                        <th class="px-4 py-3 text-center">Visits</th>
+                        <th class="px-4 py-3 text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {% for url in all_urls %}
-                        <tr class="hover:bg-gray-100">
-                            <td class ="border px-4 py-2 text-blue-600 underline">
-                                <a href="/{{ url[1] }}" target="_blank">
-                                 {{ request.host }}/{{ url[1] }}  <!-- http://localhost:5000{{url[1]}} -->
-                                </a>
-                            </td>
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="px-4 py-3 text-blue-600 font-medium">
+                            <a
+                                href="/{{ url[1] }}"
+                                target="_blank"
+                                class="hover:underline"
+                            >
+                                {{ request.host }}/{{ url[1] }}
+                            </a>
+                        </td>
 
-                            <td class="border px-4 py-2">{{url[0]}}</td>
-                            <td class="border px-4 py-2">{{url[2]}}</td>
+                        <td class="px-4 py-3 text-gray-700 truncate max-w-xs">
+                            {{ url[0] }}
+                        </td>
 
-                            <td class="border px-4 py-2">
-                                <form 
-                                    action="/delete/{{url[1]}}"
-                                    method="POST"
-                                    onsubmit="return confirm('Delete this short url?')"
-                                    >
-                                    <button type="submit" class="text-red-600">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
+                        <td class="px-4 py-3 text-center font-semibold">
+                            {{ url[2] }}
+                        </td>
+
+                        <td class="px-4 py-3 text-center">
+                            <form
+                                action="/delete/{{ url[1] }}"
+                                method="POST"
+                                onsubmit="return confirm('Delete this short URL?')"
+                            >
+                                <button
+                                    type="submit"
+                                    class="text-red-600 hover:text-red-800 font-medium"
+                                >
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
                     {% endfor %}
-               </tbody>
+                </tbody>
             </table>
         </div>
         {% else %}
-        <p class="text-gray-600">No Urls have been shorted</p>
-
-        {% endif%}
+            <p class="text-gray-500 text-center mt-6">
+                No URLs have been shortened yet.
+            </p>
+        {% endif %}
 
     </div>
+
 </body>
 </html>
